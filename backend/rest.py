@@ -1,11 +1,20 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 from sqlite3 import Error
-import json
 
 
 # -------------- Rest API and DB Config ---------------
 app = FastAPI()
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 path = "./db/nba-elo-db.db"
 try:
     connection = sqlite3.connect(path, check_same_thread=False)
