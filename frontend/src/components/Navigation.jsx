@@ -33,6 +33,11 @@ export default function Navigation () {
                     <Nav className="ml-auto">
                         <Nav.Link className="navLink" href="/players" style={textStyle}>Players</Nav.Link>
                     </Nav>
+
+                    <Nav className="ml-auto">
+                        <Nav.Link className="navLink" href="/trade-effect" style={textStyle}>Trade Effect</Nav.Link>
+                    </Nav>
+
                 </Navbar.Collapse>
             </Container>
         </Navbar>

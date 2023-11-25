@@ -133,6 +133,46 @@ def getAllPlayersSorted():
     return res
 
 
+@app.get('/trade-effect')
+def tradeEffect():
+    connection = create_connection()
+    query = "SELECT * FROM trades"
+    cursor = connection.execute(query)
+
+    allEloDifferences = getFirstAndFinalEloByTeam()
+    res = []
+
+    for elem in cursor.fetchall():
+        name = elem[0]
+        old = elem[1]
+        new = elem[2]
+
+        if old == "CHA" or new == "CHA":
+            continue
+        
+
+        effect = {
+            "player": name,
+            "old_team": old,
+            "new_team": new
+        }
+
+        for d in allEloDifferences:
+            if (d['team'] == old):
+                effect['old_team_pre'] = d['preElo']
+                effect['old_team_post'] = d['postElo']
+
+            elif (d['team'] == new):
+                effect['new_team_pre'] = d['preElo']
+                effect['new_team_post'] = d['postElo']
+            
+        effect['new_difference'] = effect['new_team_post'] - effect['new_team_pre']
+        effect['old_difference'] = effect['old_team_post'] - effect['old_team_pre']    
+        res.append(effect)
+
+    connection.close()
+    return res
+
 @app.get('/best-matchups')
 def getBestMatchups():
     connection = create_connection()
