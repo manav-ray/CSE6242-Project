@@ -40,7 +40,6 @@ export default function AllGames() {
         })
         .then((jsonData) => {
             if (!isUnmount) {
-                console.log(jsonData);
                 setData(jsonData)
             }
         })

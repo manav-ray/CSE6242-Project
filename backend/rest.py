@@ -75,17 +75,27 @@ def getEloByTeam(team):
     return res
 
 
-@app.get('/elo-progression/{team}')
-def getFirstAndFinalEloByTeam(team):
-    query = "SELECT * FROM (SELECT * FROM elo WHERE team = '" + team + "' ORDER BY date LIMIT 1) AS first UNION SELECT * FROM (SELECT * FROM elo WHERE team = '" + team + "' ORDER BY date DESC LIMIT 1) AS last"
-    cursor = connection.execute(query)
+@app.get('/elo-progression/')
+def getFirstAndFinalEloByTeam():
+    allTeams = getAllTeams()['teams']
     res = []
-    for elem in cursor.fetchall():
-        elo = {
-            "team": elem[0],
-            "curr_elo": elem[1],
-            "date": elem[2]
-        }
+    for team in allTeams:
+        query = "SELECT * FROM (SELECT * FROM elo WHERE team = '" + team + "' ORDER BY date LIMIT 1) AS first UNION SELECT * FROM (SELECT * FROM elo WHERE team = '" + team + "' ORDER BY date DESC LIMIT 1) AS last"
+        cursor = connection.execute(query)
+
+        queryResult = cursor.fetchall()
+        if (queryResult[0][2] < queryResult[1][2]):
+            elo = {
+                "team": queryResult[0][0],
+                "preElo": queryResult[0][1],
+                "postElo": queryResult[1][1]
+            }
+        else:
+            elo = {
+                "team": queryResult[0][0],
+                "preElo": queryResult[1][1],
+                "postElo": queryResult[0][1]                
+            }
 
         res.append(elo)
 
