@@ -25,6 +25,10 @@ export default function Navigation () {
                     <Nav className="ml-auto">
                         <Nav.Link className="navLink" href="/team-elo-difference" style={textStyle}>ELO Difference</Nav.Link>
                     </Nav>
+
+                    <Nav className="ml-auto">
+                        <Nav.Link className="navLink" href="/best-matchups" style={textStyle}>Best Matchups</Nav.Link>
+                    </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
