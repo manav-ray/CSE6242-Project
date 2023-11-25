@@ -15,16 +15,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-path = "./db/nba-elo-db.db"
-try:
-    connection = sqlite3.connect(path, check_same_thread=False)
-    connection.text_factory = str
-except Error as e:
-    print("Error occurred: " + str(e))
+def create_connection():
+    path = "./db/nba-elo-db.db"
+    try:
+        connection = sqlite3.connect(path, check_same_thread=False)
+        connection.text_factory = str
+        return connection
+    except Error as e:
+        print("Error occurred: " + str(e))
 # -----------------------------------------------------
 
 @app.get('/all-games')
 def getAllGames():
+    connection = create_connection()
     query = "SELECT * FROM games ORDER BY date"
     cursor = connection.execute(query)
     res = []
@@ -40,6 +43,7 @@ def getAllGames():
 
         res.append(game)
 
+    connection.close()
     return res
 
 
@@ -47,6 +51,7 @@ def getAllGames():
 
 @app.get('/all-teams')
 def getAllTeams():
+    connection = create_connection()
     query = "SELECT team FROM elo"
     cursor = connection.execute(query)
 
@@ -54,12 +59,14 @@ def getAllTeams():
     for i in cursor.fetchall():
         teams.add(i[0])
     
+    connection.close()
     return {"teams": list(teams)}
 
 
 
 @app.get('/elo/{team}')
 def getEloByTeam(team):
+    connection = create_connection()
     query = "SELECT * FROM elo WHERE team = '" + team + "' ORDER BY date"
     cursor = connection.execute(query)
     res = []
@@ -72,11 +79,13 @@ def getEloByTeam(team):
 
         res.append(elo)
 
+    connection.close()
     return res
 
 
 @app.get('/elo-progression/')
 def getFirstAndFinalEloByTeam():
+    connection = create_connection()
     allTeams = getAllTeams()['teams']
     res = []
     for team in allTeams:
@@ -99,11 +108,34 @@ def getFirstAndFinalEloByTeam():
 
         res.append(elo)
 
+    connection.close()
+    return res
+
+
+@app.get('/all-players')
+def getAllPlayersSorted():
+    connection = create_connection()
+    query = "SELECT * FROM players ORDER BY raptor_war DESC"
+    cursor = connection.execute(query)
+    res = []
+    for elem in cursor.fetchall():
+        if (elem[3] != ""):
+            game = {
+                "name": elem[0],
+                "team": elem[1],
+                "position": elem[2],
+                "raptor_war": elem[3]
+            }
+
+            res.append(game)
+
+    connection.close()
     return res
 
 
 @app.get('/best-matchups')
 def getBestMatchups():
+    connection = create_connection()
     teams = getAllTeams()["teams"]
     matchups = []
     for i in range(len(teams)):
@@ -135,4 +167,5 @@ def getBestMatchups():
 
         res.append(diff)
 
+    connection.close()
     return res

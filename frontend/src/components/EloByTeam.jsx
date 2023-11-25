@@ -51,7 +51,7 @@ export default function EloByTeam () {
             setData({
                 labels: dates,
                 datasets: [{
-                    label: "ELO",
+                    label: "ELO Progression",
                     data: elos
                 }]
             })

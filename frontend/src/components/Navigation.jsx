@@ -29,6 +29,10 @@ export default function Navigation () {
                     <Nav className="ml-auto">
                         <Nav.Link className="navLink" href="/best-matchups" style={textStyle}>Best Matchups</Nav.Link>
                     </Nav>
+
+                    <Nav className="ml-auto">
+                        <Nav.Link className="navLink" href="/players" style={textStyle}>Players</Nav.Link>
+                    </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

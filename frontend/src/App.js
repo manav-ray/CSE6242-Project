@@ -5,6 +5,7 @@ import AllGames from './components/AllGames';
 import Navigation from './components/Navigation';
 import EloDifference from './components/EloDifference';
 import BestMatchups from './components/BestMatchups';
+import Players from './components/Players';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/team-elo-progression" exact component={() => <EloByTeam />} />
         <Route path="/team-elo-difference" exact component={() => <EloDifference />} />
         <Route path="/best-matchups" exact component={() => <BestMatchups />} />
+        <Route path="/players" exact component={() => <Players />} />
       </Switch>
     </Router>
   );
