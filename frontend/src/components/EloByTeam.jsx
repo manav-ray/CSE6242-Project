@@ -51,7 +51,7 @@ export default function EloByTeam () {
             setData({
                 labels: dates,
                 datasets: [{
-                    label: "ELO Progression",
+                    label: "ELO",
                     data: elos
                 }]
             })
@@ -60,7 +60,7 @@ export default function EloByTeam () {
 
 
     return (
-        <div className="lineCharts">
+        <div className="chart-container">
             <h3>NBA 2022-23 ELO Progression for {selectedTeam}</h3>
             <Select 
                 onChange={selectHandler}

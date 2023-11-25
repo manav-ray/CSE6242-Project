@@ -25,16 +25,16 @@ except Error as e:
 
 @app.get('/all-games')
 def getAllGames():
-    query = "SELECT * FROM games"
+    query = "SELECT * FROM games ORDER BY date"
     cursor = connection.execute(query)
     res = []
     for elem in cursor.fetchall():
         game = {
-            "team1": elem[0],
-            "team2": elem[1],
+            "homeTeam": elem[0],
+            "awayTeam": elem[1],
             "playoff": elem[2],
-            "team1_score": elem[3],
-            "team2_score": elem[4],
+            "homeScore": elem[3],
+            "awayScore": elem[4],
             "date": elem[5]
         }
 
