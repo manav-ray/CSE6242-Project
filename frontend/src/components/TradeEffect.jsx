@@ -63,7 +63,7 @@ export default function TradeEffect() {
 
     return (
         <div className="chart-container">
-            <h3>NBA 2023-24 Best Matchups</h3>
+            <h3>NBA 2022-23 Player Trade Effects</h3>
             { data !== null ?
                 <ReactTable 
                     data={data}
