@@ -1,0 +1,16 @@
+.chart-container {
+    margin: auto;
+    width: 75%;
+    padding: 10px;
+    text-align: center;
+}
+
+.navLink:hover {
+    background-color: #333;
+    border-color: #333
+}
+
+.navbar {
+    background-color: #772953;
+    border-color: #772953
+}
