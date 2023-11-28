@@ -15,8 +15,12 @@ export default function AllGames() {
         accessor: "awayTeam"
     },
     {
-        Header: "Playoff",
-        accessor: "playoff"
+        Header: "Home ELO",
+        accessor: "homeElo"
+    },
+    {
+        Header: "Away ELO",
+        accessor: "awayElo"
     },
     {
         Header: "Home Score",

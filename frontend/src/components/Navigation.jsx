@@ -38,6 +38,15 @@ export default function Navigation () {
                         <Nav.Link className="navLink" href="/trade-effect" style={textStyle}>Trade Effect</Nav.Link>
                     </Nav>
 
+                    <Nav className="ml-auto">
+                        <Nav.Link className="navLink" href="/elo-margin-of-victory" style={textStyle}>ELO vs Score Difference</Nav.Link>
+                    </Nav>
+
+                    <Nav className="ml-auto">
+                        <Nav.Link className="navLink" href="/elo-home-vs-away" style={textStyle}>Home vs Away ELO</Nav.Link>
+                    </Nav>
+
+
                 </Navbar.Collapse>
             </Container>
         </Navbar>

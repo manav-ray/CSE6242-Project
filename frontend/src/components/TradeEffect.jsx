@@ -19,24 +19,8 @@ export default function TradeEffect() {
         accessor: "new_team"
     },
     {
-        Header: "Old Team Pre ELO",
-        accessor: "old_team_pre"
-    },
-    {
-        Header: "Old Team Post ELO",
-        accessor: "old_team_post"
-    },
-    {
         Header: "Old Team Difference",
         accessor: "old_difference"
-    },
-    {
-        Header: "New Team Pre ELO",
-        accessor: "new_team_pre"
-    },
-    {
-        Header: "New Team Post ELO",
-        accessor: "new_team_post"
     },
     {
         Header: "New Team Difference",

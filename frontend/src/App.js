@@ -7,6 +7,8 @@ import EloDifference from './components/EloDifference';
 import BestMatchups from './components/BestMatchups';
 import Players from './components/Players';
 import TradeEffect from './components/TradeEffect';
+import EloMargin from './components/EloMargin';
+import HomeVsAway from './components/HomeVsAwayElo';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route path="/best-matchups" exact component={() => <BestMatchups />} />
         <Route path="/players" exact component={() => <Players />} />
         <Route path="/trade-effect" exact component={() => <TradeEffect />} />
+        <Route path="/elo-margin-of-victory" exact component={() => <EloMargin />} />
+        <Route path="/elo-home-vs-away" exact component={() => <HomeVsAway />} />
       </Switch>
     </Router>
   );

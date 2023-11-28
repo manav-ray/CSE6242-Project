@@ -28,17 +28,18 @@ def create_connection():
 @app.get('/all-games')
 def getAllGames():
     connection = create_connection()
-    query = "SELECT * FROM games ORDER BY date"
+    query = "SELECT games.*, e1.elo, e2.elo FROM games INNER JOIN elo as e1 on (games.date = e1.date AND games.team_1 = e1.team) INNER JOIN elo as e2 on (games.date = e2.date AND games.team_2 = e2.team) ORDER BY games.date"
     cursor = connection.execute(query)
     res = []
     for elem in cursor.fetchall():
         game = {
             "homeTeam": elem[0],
             "awayTeam": elem[1],
-            "playoff": elem[2],
             "homeScore": elem[3],
             "awayScore": elem[4],
-            "date": elem[5]
+            "date": elem[5],
+            "homeElo": round(elem[6], 2),
+            "awayElo": round(elem[7], 2)
         }
 
         res.append(game)
@@ -76,6 +77,31 @@ def getEloByTeam(team):
             "curr_elo": elem[1],
             "date": elem[2]
         }
+
+        res.append(elo)
+
+    connection.close()
+    return res
+
+@app.get('/elo-home-vs-away/{team}')
+def getEloByTeamHomeVsAway(team):
+    connection = create_connection()
+    query = "SELECT elo.*, games.* FROM elo INNER JOIN games ON ((elo.team = games.team_1 OR elo.team = games.team_2) AND elo.date = games.date) WHERE team = '" + team + "' ORDER BY date"
+    cursor = connection.execute(query)
+    res = []
+    for elem in cursor.fetchall():
+        if team == elem[3]:
+            elo = {
+                "team": elem[0],
+                "home_curr_elo": elem[1],
+                "date": elem[2]
+            }
+        else:
+            elo = {
+                "team": elem[0],
+                "away_curr_elo": elem[1],
+                "date": elem[2]
+            }
 
         res.append(elo)
 
@@ -166,12 +192,52 @@ def tradeEffect():
                 effect['new_team_pre'] = d['preElo']
                 effect['new_team_post'] = d['postElo']
             
-        effect['new_difference'] = effect['new_team_post'] - effect['new_team_pre']
-        effect['old_difference'] = effect['old_team_post'] - effect['old_team_pre']    
+        effect['new_difference'] = round(effect['new_team_post'] - effect['new_team_pre'], 3)
+        effect['old_difference'] = round(effect['old_team_post'] - effect['old_team_pre'], 3)    
         res.append(effect)
 
     connection.close()
     return res
+
+@app.get('/elo-margin-of-victory/{team}')
+def getEloByMarginOfVictory(team):
+    connection = create_connection()
+    query = "SELECT elo.*, games.* FROM elo INNER JOIN games ON ((elo.team = games.team_1 OR elo.team = games.team_2) AND elo.date = games.date) WHERE team = '" + team + "' ORDER BY date"
+    cursor = connection.execute(query)
+    res = []
+
+    i = 1
+
+    data = cursor.fetchall()
+
+    for elem in data:
+        if team == elem[3]:
+            score_diff = elem[6] - elem[7]
+        else:
+            score_diff = elem[7] - elem[6]
+
+        if i == len(data):
+            if score_diff > 0:
+                elo_diff = 10
+            else:
+                elo_diff = -10
+        else:
+            elo_diff = data[i][1] - data[i-1][1]
+        
+        i += 1
+
+        elo = {
+            "team": elem[0],
+            "curr_elo": elo_diff,
+            "score_diff": score_diff,
+            "date": elem[2]
+        }
+
+        res.append(elo)
+
+    connection.close()
+    return res
+
 
 @app.get('/best-matchups')
 def getBestMatchups():
