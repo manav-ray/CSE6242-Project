@@ -46,6 +46,9 @@ export default function Navigation () {
                         <Nav.Link className="navLink" href="/elo-home-vs-away" style={textStyle}>Home vs Away ELO</Nav.Link>
                     </Nav>
 
+                    <Nav className="ml-auto">
+                        <Nav.Link className="navLink" href="/trade-predictions" style={textStyle}>Trade Predictions</Nav.Link>
+                    </Nav>
 
                 </Navbar.Collapse>
             </Container>

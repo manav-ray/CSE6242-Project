@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 from sqlite3 import Error
+import numpy as np
+from sklearn.linear_model import LinearRegression
 
 
 # -------------- Rest API and DB Config ---------------
@@ -48,6 +50,47 @@ def getAllGames():
     return res
 
 
+@app.get("/predict")
+def predictTradeEffect():
+    tradeEffects = tradeEffect()
+    players = getAllPlayersSorted()
+
+    his_war = []
+    his_elo = []
+    for t in tradeEffects:
+        player = t["player"]
+        war = 0
+        for p in players:
+            if p["name"] == player:
+                war = p["raptor_war"]
+                
+        
+        if war != 0:
+           his_war.append(war)
+           his_elo.append(t["new_difference"])
+        
+    war_train = np.array(his_war).reshape(-1, 1)
+    elo_train = np.array(his_elo)
+
+    reg = LinearRegression().fit(war_train, elo_train)
+
+    res = []
+
+    for p in players:
+        temp = [p["raptor_war"]]
+        test = np.array(temp).reshape(-1, 1)
+
+        elem = {
+            "player": p["name"],
+            "position": p["position"],
+            "prediction": round(reg.predict(test)[0], 2)
+        }
+
+
+        res.append(elem)
+
+
+    return res
 
 
 @app.get('/all-teams')
